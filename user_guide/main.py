@@ -1,11 +1,14 @@
 from enum import Enum
-from typing import Union
+from typing import Annotated
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
-fake_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+fake_items_db = [
+    {"item_name": "Foo"},
+      {"item_name": "Bar"},
+        {"item_name": "Baz"}]
 
 class Item(BaseModel):
     name: str
@@ -45,6 +48,13 @@ async def get_model(model_name: ModelName):
 @app.get("/files/{file_path:path}")
 async def read_file(file_path: str):
     return {"file_path": file_path}
+
+@app.get("/items/")
+async def read_items(q: Annotated[str | None, Query(min_length=3, max_length=50, pattern="^fixedquery$") ] = None):
+    results = {"items" : [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: str, q: str | None = None, short: bool = False):
