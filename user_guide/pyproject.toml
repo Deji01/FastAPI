@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "user-guide"
 version = "0.1.0"
-description = ""
+description = "FastAPI Tutorial User Guide"
 authors = ["Ayodeji Yekeen <ayodejiyou@gmail.com>"]
 readme = "README.md"
 
