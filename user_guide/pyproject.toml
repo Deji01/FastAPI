@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "user-guide"
+version = "0.1.0"
+description = ""
+authors = ["Ayodeji Yekeen <ayodejiyou@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.109.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
