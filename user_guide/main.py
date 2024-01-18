@@ -1,9 +1,10 @@
 from enum import Enum
 from typing import Annotated
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Cookie, Header, Depends
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel
+
+from pydantic import BaseModel, HttpUrl
 
 fake_items_db = [
     {"item_name": "Foo"},
@@ -20,6 +21,10 @@ class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+
+class Image(BaseModel):
+    url: HttpUrl
+    name: str
 
 app = FastAPI()
 
@@ -65,6 +70,18 @@ async def read_item(item_id: str, q: str | None = None, short: bool = False):
         item.update({"description": "This is an amazing item that has a long description"})
     return item
 
+def get_cookies(token: str = Cookie(None)):
+    return {"token": token}
+
+@app.get("/get-cookies")
+async def get_cookies_endpoint(cookies: dict = Depends(get_cookies)):
+    return cookies
+
+
+@app.get("/item/header")
+async def get_header(user_agent: str | None = Header(None)):
+    return {"User-Agent": user_agent}
+
 @app.get("/users/{user_id}/items/{item_id}")
 async def read_user_item(
     user_id: int, item_id: str, q: str | None = None, short: bool = False
@@ -90,4 +107,8 @@ async def update_item(item_id: int, item: Item, q: str | None = None):
     if q:
         result.update({"q": q})
     return result
+
+@app.post("/images/multiple/")
+async def create_multiple_images(images: list[Image]):
+    return images
 
