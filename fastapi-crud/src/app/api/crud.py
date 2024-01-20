@@ -5,7 +5,7 @@ from datetime import datetime
 
 from fastapi import Depends
 from nanoid import generate
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 
 async def post(payload: NoteSchema, session: Session = Depends(get_session)):
@@ -17,4 +17,9 @@ async def post(payload: NoteSchema, session: Session = Depends(get_session)):
     )
     await session.add(note)
     await session.commit()
+    return note
+
+async def get(id: str, session: Session = Depends(get_session)):
+    query = select(NoteDB).where(NoteDB.id == id)
+    note = await session.exec(query).first()
     return note
