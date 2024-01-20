@@ -1,11 +1,8 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from .api import ping, root
+
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return RedirectResponse("/docs")
+app.include_router(root.router)
+app.include_router(ping.router)
     
-@app.get("/ping")
-def pong():
-    return {"ping": "pong!"}
