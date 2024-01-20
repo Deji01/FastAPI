@@ -23,3 +23,8 @@ async def get(id: str, session: Session = Depends(get_session)):
     query = select(NoteDB).where(NoteDB.id == id)
     note = await session.exec(query).first()
     return note
+
+async def get_all(session: Session = Depends(get_session)):
+    query = select(NoteDB)
+    notes = await session.exec(query).all()
+    return notes
