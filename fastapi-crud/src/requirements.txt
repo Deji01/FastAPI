@@ -1,8 +1,8 @@
 asyncpg==0.29.0
-databases[postgresql]==0.8.0
 fastapi==0.109.0
+nanoid==2.0.0
 psycopg2-binary==2.9.9
-SQLAlchemy==1.4.51
+sqlmodel==0.0.14
 uvicorn==0.26.0
 
 #dev

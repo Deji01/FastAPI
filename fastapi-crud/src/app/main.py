@@ -1,18 +1,15 @@
-from contextlib import asynccontextmanager
-
-from fastapi import FastAPI
-
 from .api import notes, ping, root
-from .db import engine, database, metadata
+from .db import engine
 
-metadata.create_all(engine)
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from sqlmodel import SQLModel
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    await database.connect()
+async def lifespan(_: FastAPI):
+    await SQLModel.metadata.create_all(engine)
     yield
-    await database.disconnect()
 
 
 USE_LIFESPAN = True

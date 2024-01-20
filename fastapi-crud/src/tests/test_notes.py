@@ -1,18 +1,18 @@
-import json
-
 from app.api import crud
+
+import json
 
 
 def test_create_note(test_app, monkeypatch):
     test_request_payload = {"title": "something", "description": "something else"}
     test_response_payload = {
-        "id": 1,
+        "id": "SpUPqRU_m8svdtLTV2kEy",
         "title": "something",
         "description": "something else",
     }
 
     async def mock_post(payload):
-        return 1
+        return "SpUPqRU_m8svdtLTV2kEy"
 
     monkeypatch.setattr(crud, "post", mock_post)
 
