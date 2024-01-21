@@ -28,3 +28,15 @@ async def get_all(session: Session = Depends(get_session)):
     query = select(NoteDB)
     notes = await session.exec(query).all()
     return notes
+
+async def put(id: str, payload: NoteSchema, session: Session = Depends(get_session)):
+    query = select(NoteDB).where(NoteDB.id == id)
+    note = await session.exec(query).one()
+    if payload.title:
+        note.title = payload.title
+    if payload.description:
+        note.description = payload.description
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+    return note
